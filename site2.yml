@@ -13,31 +13,31 @@
 
   - name: install updates (ubuntu)
     tags: always
-    apt:
-      upgrade: dist
+    apt: 
+      upgrade: dist 
       update_cache: yes
-    when: ansible_distribution == "ubuntu"
+    when: ansible_distribution == "ubuntu"  
 
 - hosts: workstations
   become: true
-  tasks:
+  tasks: 
 
   - name: install unzip
-    package:
+    package: 
       name: unzip
 
   - name: install terraform
-    unarchive:
+    unarchive:  
       src: https://releases.hashicorp.com/terraform/0.14.9/terraform_0.14.9_linux_amd64.zip
       dest: /usr/local/bin
       remote_src: yes
       mode: 0755
-      owner: root
-      group: root
+      owner: root 
+      group: root 
 
 - hosts: web_servers
   become: true
-  tasks:
+  tasks: 
 
   - name: install apache2 and php packages for ubuntu
     tags: apache,apache2,ubuntu
@@ -59,30 +59,30 @@
 
   - name: start httpd (CentOS)
     tags: apache,centos,httpd
-    service:
-      name: httpd
+    service: 
+      name: httpd 
       state: started
     when: ansible_distribution == "CentOS"
 
   - name: change e-mail address for admin
     tags: apache,centos,httpd
-    lineinfile:
-      path:  /etc/httpd/conf/httpd.conf
-      regexp: '^ServerAdmin'
-      line: ServerAdmin somebody@somewhere.net
-    when: ansible_distribution == "CentOS"
-    register: httpd
+    lineinfile:  
+    path:  /etc/httpd/conf/httpd.conf
+    regexp: '^ServerAdmin'
+    line: ServerAdmin somebody@somewhere.net
+  when: ansible_distribution == "CentOS" 
+  register: httpd
 
   - name: restart httpd (CentOS)
-    tags: apache,centOS,httpd
-    service:
+    tags: apache,CentOS,httpd 
+    service: 
       name: httpd
       state: restarted
-    when: httpd.changed
+    when: httpd,changed       
 
   - name: copy default html file for site
     tags: apache,apache2,httpd
-    copy:
+    copy: 
       src: default_site.html
       dest: /var/www/html/index.html
       owner: root
@@ -91,7 +91,7 @@
 
 - hosts: db_servers
   become: true
-  tasks:
+  tasks: 
 
   - name: install mariadb package (CentOS)
     tags: CentOS,db,mariadb
@@ -105,3 +105,4 @@
     apt:
       name: mariadb-server
       state: latest
+
