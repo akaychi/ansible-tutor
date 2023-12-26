@@ -1,0 +1,5 @@
+- name: add ssh key for sylvia
+  authorized_key:
+    user: sylvia
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEibhe2A8iXzM2PLrQ46GeT1KaNDKFI5cwqMgwa1feVn ansible"  
+
