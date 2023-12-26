@@ -1,0 +1,45 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates (CentOS)
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: install updates (ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "ubuntu"
+
+- hosts: all
+  become: true 
+  tasks: 
+
+  - name: create sylvia user
+    tags: always
+    user: 
+      name: sylvia
+      groups: root
+
+  - name: add ssh key for sylvia
+    tags: always
+    authorized_key:
+      user: sylvia
+      state: present
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEibhe2A8iXzM2PLrQ46GeT1KaNDKFI5cwqMgwa1feVn ansible" 
+
+  - name: add sudoers file for sylvia
+    tags: always
+    copy:
+      src: sudoers_sylvia
+      dest: /etc/sudoers.d/sylvia
+      owner: root
+      group: root
+      mode: 0440
